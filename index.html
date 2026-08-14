@@ -3,136 +3,798 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>@mariane_ofc7</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300&display=swap" rel="stylesheet">
+<title>Contador</title>
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+* {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  html, body {
-    width: 100%;
-    height: 100%;
-  }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 90% 0%, #111a24 0%, transparent 40%),
+    #080d12;
+  color: #c5d1de;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden;
+}
 
-  body {
-    min-height: 100dvh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Poppins', sans-serif;
+/* PAINEL PRINCIPAL */
+.painel {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 320px ;
+  padding: 16px;
+  background: rgba(15, 23, 32, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(15px);
+}
 
-    /* fundo FIXO (sem mexer) */
-    background: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b') center/cover no-repeat;
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
 
-    position: relative;
-    overflow: hidden;
-  }
+.rotulo {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #5c6e80;
+}
 
-  /* overlay feminino suave */
-  body::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(20,10,30,0.65), rgba(255,105,180,0.12));
-  }
+.data-inicio {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #a2b3c4;
+}
 
-  .container {
-    width: 92vw;
-    max-width: 430px;
-    padding: 26px 20px;
-    border-radius: 22px;
+.hora-inicio {
+  margin-top: 3px;
+  font-size: 12px;
+  color: #5c6e80;
+}
 
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+.botao-config {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid #1c2b38;
+  background: #0f1922;
+  color: #8da0b3;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  outline: none;
+}
 
-    box-shadow: 0 0 30px rgba(0,0,0,0.45);
+.botao-config:hover {
+  background: #182736;
+  color: #d1dfed;
+}
 
-    text-align: center;
-    position: relative;
-    z-index: 2;
-  }
+/* TEMPO PRINCIPAL - MAIS COMPACTO */
+.area-dia {
+  text-align: center;
+  margin-top: 14px;
+  margin-bottom: 12px;
+}
 
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: #fff;
-    margin-bottom: 14px;
-  }
+.grid-tempo-principal {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
 
-  .poema {
-    font-size: 16px;
-    line-height: 1.7;
-    color: #fff;
-    margin-bottom: 20px;
-  }
+.coluna-tempo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 6px;
+}
 
-  .btn {
-    display: inline-block;
-    padding: 12px 26px;
-    border-radius: 30px;
-    background: linear-gradient(45deg, #ff4da6, #ff9bd5);
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-  }
+.rotulo-coluna {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5c6e80;
+  margin-bottom: 2px;
+}
 
-  .arroba {
-    margin-top: 12px;
-    font-size: 13px;
-    opacity: 0.85;
-    color: #fff;
-  }
+.numero-coluna {
+  font-size: 22px;
+  font-weight: 700;
+  color: #d1dfed;
+}
 
-  .coracao {
-    position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 18px;
-    color: #ff4da6;
-  }
+/* TEMPO DECORRIDO - REDUZIDO */
+.tempo-box {
+  padding: 10px 8px;
+  text-align: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
 
-</style>
-</head>
+.tempo {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #a3b8cc;
+  font-variant-numeric: tabular-nums;
+}
 
-<body>
+/* BOTÃO CONFIRMAR DINÂMICO */
+.area-confirmar {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+}
 
-<div class="container">
+.botao-confirmar {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  outline: none;
+}
 
-  <div class="coracao">❤</div>
+.botao-confirmar.bloqueado {
+  background: #3a1c1e;
+  border: 1px solid #5a272a;
+  color: #e58b8b;
+}
 
-  <h1>Eu sou ela ✨</h1>
+.botao-confirmar.bloqueado:hover {
+  background: #4a2326;
+  color: #f5a3a3;
+}
 
-  <div class="poema">
-    Eu sou a calma que muitos não entendem,<br>
-    e a força que poucos conseguem ver.<br>
-    Carrego mundos dentro de mim,<br>
-    mesmo quando pareço só existir.<br><br>
+.botao-confirmar.liberado {
+  background: #1b3e2b;
+  border: 1px solid #285a3e;
+  color: #8be5ad;
+}
 
-    Não sou perfeita, nem quero ser,<br>
-    mas sei exatamente quem eu sou.<br>
-    E em cada fase da minha vida,<br>
-    fui eu quem nunca me abandonou.<br><br>
+.botao-confirmar.liberado:hover {
+  background: #235238;
+  color: #a3f5c3;
+}
 
-    Já duvidei, já calei, já senti demais,<br>
-    mas nunca deixei de continuar.<br>
-    Porque mesmo nos dias mais difíceis,<br>
-    eu sempre dei um jeito de me reencontrar.
+/* MODAIS COM DESFOQUE E BLOQUEIO DO FUNDO */
+.fundo-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 440px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background: #0d151e;
+  border: 1px solid #1e2d3b;
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+}
+
+.cabecalho-modal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.titulo-modal {
+  margin: 0;
+  font-size: 16px;
+  color: #c5d1de;
+}
+
+.fechar {
+  border: none;
+  background: transparent;
+  color: #5c6e80;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 0 5px;
+  outline: none;
+}
+
+.fechar:hover {
+  color: #d1dfed;
+}
+
+.label-config {
+  display: block;
+  font-size: 11px;
+  color: #5c6e80;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.input-config {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #1c2b38;
+  background: #091017;
+  color: #c5d1de;
+  font-size: 13px;
+  outline: none;
+  margin-bottom: 8px;
+}
+
+.botao-acao {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #1c2b38;
+  background: #13202c;
+  color: #9cb2c9;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: 0.2s;
+  outline: none;
+}
+
+.botao-acao:hover {
+  background: #1c2e3f;
+  color: #d1dfed;
+}
+
+.botao-perigo {
+  background: #2a1518;
+  border-color: #4a2025;
+  color: #d98282;
+}
+
+.botao-perigo:hover {
+  background: #3b1c20;
+  color: #f2a2a2;
+}
+
+.area-aviso-senha {
+  text-align: left;
+  font-size: 11px;
+  min-height: 16px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* HISTÓRICO FIXO */
+.area-historico {
+  flex: 1;
+     </div>
+
+    <label class="label-config">Mudar Data/Hora do Ocorrido (DD/MM/AAAA HH:MM)</label>
+    <input type="text" class="input-config" id="inputDataInicio" placeholder="14/08/2026 12:38" maxlength="16">
+    
+    <button class="botao-acao" onclick="prepararConfirmacaoSalvarData()">Salvar Nova Data</button>
+
+    <hr style="border: 0; border-top: 1px solid #1c2b38; margin: 15px 0;">
+
+    <button class="botao-acao botao-perigo" onclick="prepararConfirmacaoReset()">Redefinir para o Padrão do Site</button>
   </div>
-
-  <a class="btn" href="https://instagram.com/mariane_ofc7" target="_blank">
-    Ver perfil
-  </a>
-
-  <div class="arroba">@mariane_ofc7 ✨</div>
-
 </div>
 
+<!-- MODAL HISTÓRICO -->
+<div class="fundo-modal" id="modalHistorico">
+  <div class="modal">
+    <div class="cabecalho-modal">
+      <h2 class="titulo-modal">Histórico de Registros</h2>
+      <button class="fechar" onclick="fecharHistoricoVoltarConfig()">×</button>
+    </div>
+
+    <div class="area-historico" id="listaHistorico"></div>
+  </div>
+</div>
+
+<!-- MODAL AVISO -->
+<div class="fundo-modal" id="modalAviso">
+  <div class="modal">
+    <div class="cabecalho-modal">
+      <h2 class="titulo-modal">Aviso</h2>
+      <button class="fechar" onclick="fecharAvisoImediato()">×</button>
+    </div>
+
+    <div class="texto-aviso" id="msgAviso">--</div>
+    <button class="botao-acao" onclick="fecharAvisoImediato()">Entendido</button>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMAÇÃO DO DIA -->
+<div class="fundo-modal" id="modalPerguntaConfirmar">
+  <div class="modal">
+    <div class="cabecalho-modal">
+      <h2 class="titulo-modal">Confirmar Registro</h2>
+      <button class="fechar" onclick="fecharModal('modalPerguntaConfirmar')">×</button>
+    </div>
+
+    <div class="texto-aviso" id="msgPerguntaConfirmar">Deseja confirmar a conclusão do dia?</div>
+
+    <div class="botoes-confirmacao">
+      <button class="botao-acao btn-sim" onclick="efetuarConfirmacaoSim()">Confirmar Dia</button>
+      <button class="botao-acao btn-nao" onclick="efetuarNaoConfirmar()">Não Confirmar Dia</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ALTERAÇÃO / SELEÇÃO NO HISTÓRICO (DENTRO DO PRAZO DE 3 DIAS) -->
+<div class="fundo-modal" id="modalAlterarHistorico">
+  <div class="modal">
+    <div class="cabecalho-modal">
+      <h2 class="titulo-modal" id="tituloModalHistoricoAcao">Gerenciar Dia do Histórico</h2>
+      <button class="fechar" onclick="fecharModal('modalAlterarHistorico')">×</button>
+    </div>
+
+    <div class="texto-aviso" id="msgAlterarHistorico">Deseja realizar uma ação neste dia?</div>
+
+    <div class="botoes-confirmacao" id="botoesAcaoHistorico">
+      <button class="botao-acao btn-sim" onclick="efetuarSimAlteracaoHistorico()">Sim / Confirmar</button>
+      <button class="botao-acao btn-nao" onclick="efetuarNaoAlteracaoHistorico()">Não / Recusar</button>
+    </div>
+  </div>
+</div>
+<script>
+const SENHA_CORRETA = "free.2023";
+const DATA_PADRAO = new Date(2026, 7, 14, 16, 04, 0);
+
+let dataInicioSalva = localStorage.getItem("dataInicioContador");
+let DATA_INICIO = dataInicioSalva ? new Date(dataInicioSalva) : new Date(DATA_PADRAO);
+
+let historico = JSON.parse(localStorage.getItem("historicoContador")) || [];
+let timerAvisoAutoFechar = null;
+let acaoPendenteSenha = "";
+let diaPendenteAlternar = null;
+
+const inputData = document.getElementById("inputDataInicio");
+if (inputData) {
+  inputData.addEventListener("input", function(e) {
+    let v = e.target.value.replace(/\D/g, "");
+    let formatted = "";
+    if (v.length > 0) formatted += v.substring(0, 2);
+    if (v.length > 2) formatted += "/" + v.substring(2, 4);
+    if (v.length > 4) formatted += "/" + v.substring(4, 8);
+    if (v.length > 8) formatted += " " + v.substring(8, 10);
+    if (v.length > 10) formatted += ":" + v.substring(10, 12);
+    e.target.value = formatted;
+  });
+}
+
+function formatarData(data) {
+  return data.toLocaleDateString("pt-BR");
+}
+
+function formatarHora(data) {
+  return data.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+}
+
+function formatarParaInput(date) {
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  const h = String(date.getHours()).padStart(2, '0');
+  const min = String(date.getMinutes()).padStart(2, '0');
+  return `${d}/${m}/${y} ${h}:${min}`;
+}
+
+function parseManualDate(str) {
+  const parts = str.trim().split(" ");
+  if (parts.length < 2) return null;
+  const [d, m, y] = parts[0].split("/").map(Number);
+  const [h, min] = parts[1].split(":").map(Number);
+  if (!d || !m || !y || isNaN(h) || isNaN(min)) return null;
+  return new Date(y, m - 1, d, h, min);
+}
+
+function vibrarAparelho() {
+  if ("vibrate" in navigator) {
+    navigator.vibrate([200, 100, 200]);
+  }
+}
+
+function calcularDiferencaDetalhada(inicio, fim) {
+  let anos = fim.getFullYear() - inicio.getFullYear();
+  let meses = fim.getMonth() - inicio.getMonth();
+  let dias = fim.getDate() - inicio.getDate();
+
+  if (dias < 0) {
+    meses--;
+    const ultimoDiaMesAnterior = new Date(fim.getFullYear(), fim.getMonth(), 0).getDate();
+    dias += ultimoDiaMesAnterior;
+  }
+
+  if (meses < 0) {
+    anos--;
+    meses += 12;
+  }
+
+  const diffTime = fim.getTime() - inicio.getTime();
+  const totalDias = Math.floor(diffTime / 86400000);
+
+  return { anos, meses, dias, totalDias };
+}
+
+// Verifica dias passados que não foram preenchidos e gera entradas pendentes (dentro de até 3 dias)
+function checarDiasPendentesAutomaticos() {
+  const agora = new Date();
+  const det = 
+ calcularDiferencaDetalhada(DATA_INICIO, agora);
+  
+  // Analisa do dia 1 até o dia atual (ou o limite de 3 dias atrás)
+  for (let d = 1; d <= det.totalDias; d++) {
+    // Regra dos 3 dias: se o dia jorrou há mais de 3 dias do total atual e não foi preenchido, expira/ignora ou fica indisponível
+    if (det.totalDias - d <= 3) {
+      const existe = historico.find(item => item.dia === d);
+      if (!existe) {
+        historico.push({
+          dia: d,
+          confirmado: null, // null significa pendente / não selecionado
+          data: "Pendente",
+          hora: ""
+        });
+      }
+    }
+  }
+  salvarHistorico();
+}
+
+function atualizar() {
+  const agora = new Date();
+  let diferenca = agora.getTime() - DATA_INICIO.getTime();
+  if (diferenca < 0) diferenca = 0;
+
+  const totalSegundos = Math.floor(diferenca / 1000);
+  const horas = Math.floor((totalSegundos % 86400) / 3600);
+  const minutos = Math.floor((totalSegundos % 3600) / 60);
+  const segundos = totalSegundos % 60;
+
+  const det = calcularDiferencaDetalhada(DATA_INICIO, agora);
+
+  document.getElementById("dataInicio").textContent = formatarData(DATA_INICIO);
+  document.getElementById("horaInicio").textContent = formatarHora(DATA_INICIO);
+
+  document.getElementById("colunaAno").textContent = det.anos;
+  document.getElementById("colunaMes").textContent = det.meses;
+  document.getElementById("colunaDia").textContent = det.dias;
+
+  document.getElementById("tempo").textContent =
+    String(horas).padStart(2, "0") + ":" +
+    String(minutos).padStart(2, "0") + ":" +
+    String(segundos).padStart(2, "0");
+
+  checarDiasPendentesAutomaticos();
+  atualizarEstadoBotao(det.totalDias);
+}
+
+function atualizarEstadoBotao(diasPassados) {
+  const btn = document.getElementById("btnConfirmarPrincipal");
+  if (diasPassados < 1) {
+    btn.className = "botao-confirmar bloqueado";
+  } else {
+    btn.className = "botao-confirmar liberado";
+  }
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") atualizar();
+});
+
+function clicarConfirmarDia() {
+  const agora = new Date();
+  const det = calcularDiferencaDetalhada(DATA_INICIO, agora);
+
+  if (det.totalDias < 1) {
+    exibirAvisoTemporario("A confirmação não pode ser realizada ainda pois não se passou o período de 24 horas inicial.");
+    return;
+  }
+
+  const registro = historico.find(item => item.dia === det.totalDias);
+  if (registro && registro.confirmado !== null && registro.confirmado !== undefined) {
+    exibirAvisoTemporario("O Dia " + det.totalDias + " já foi registrado anteriormente!");
+    return;
+  }
+
+  document.getElementById("msgPerguntaConfirmar").textContent = "Deseja confirmar a conclusão do Dia " + det.totalDias + "?";
+  abrirModal("modalPerguntaConfirmar");
+}
+
+function efetuarConfirmacaoSim() {
+  fecharModal("modalPerguntaConfirmar");
+  const agora = new Date();
+  const det = calcularDiferencaDetalhada(DATA_INICIO, agora);
+
+  let registro = historico.find(item => item.dia === det.totalDias);
+  if (registro) {
+    registro.confirmado = true;
+    registro.data = formatarData(agora);
+    registro.hora = formatarHora(agora);
+  } else {
+    historico.push({
+      dia: det.totalDias,
+      confirmado: true,
+      data: formatarData(agora),
+      hora: formatarHora(agora)
+    });
+  }
+  salvarHistorico();
+  exibirAvisoTemporario("Dia " + det.totalDias + " confirmado com sucesso!");
+}
+
+function efetuarNaoConfirmar() {
+  fecharModal("modalPerguntaConfirmar");
+  const agora = new Date();
+  const det = calcularDiferencaDetalhada(DATA_INICIO, agora);
+
+  let registro = historico.find(item => item.dia === det.totalDias);
+  if (registro) {
+    registro.confirmado = false;
+    registro.data = formatarData(agora);
+    registro.hora = formatarHora(agora);
+  } else {
+    historico.push({
+      dia: det.totalDias,
+      confirmado: false,
+      data: formatarData(agora),
+      hora: formatarHora(agora)
+    });
+  }
+  salvarHistorico();
+  exibirAvisoTemporario("Dia " + det.totalDias + " registrado como NÃO confirmado.");
+}
+
+function salvarHistorico() {
+  localStorage.setItem("historicoContador", JSON.stringify(historico));
+}
+
+function exibirAvisoTemporario(msg) {
+  document.getElementById("msgAviso").textContent = msg;
+  abrirModal("modalAviso");
+
+  if (timerAvisoAutoFechar) clearTimeout(timerAvisoAutoFechar);
+  timerAvisoAutoFechar = setTimeout(() => {
+    fecharModal("modalAviso");
+  }, 3000);
+}
+
+function fecharAvisoImediato() {
+  if (timerAvisoAutoFechar) clearTimeout(timerAvisoAutoFechar);
+  fecharModal("modalAviso");
+}
+
+function abrirModal(id) {
+  document.getElementById(id).style.display = "flex";
+}
+
+function fecharModal(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+function abrirConfiguracoes() {
+  abrirModal("modalConfiguracoes");
+}
+
+function abrirGerenciarOcorridoDireto() {
+  fecharModal("modalConfiguracoes");
+  document.getElementById("inputDataInicio").value = formatarParaInput(DATA_INICIO);
+  abrirModal("modalGerenciarOcorrido");
+}
+
+function abrirModalSenhaGeral(acao, titulo, labelBtn) {
+  acaoPendenteSenha = acao;
+  const campoSenha = document.getElementById("inputSenhaAcesso");
+  campoSenha.value = "";
+  document.getElementById("msgAvisoSenhaDireita").textContent = "";
+  document.getElementById("tituloModalSenha").textContent = titulo;
+  document.getElementById("btnConfirmarSenhaAcao").textContent = labelBtn;
+  abrirModal("modalSenhaValidadora");
+}
+
+function fecharModalSenhaVoltar() {
+  fecharModal("modalSenhaValidadora");
+  abrirModal("modalGerenciarOcorrido");
+}
+
+function fecharGerenciarVoltarConfig() {
+  fecharModal("modalGerenciarOcorrido");
+  abrirModal("modalConfiguracoes");
+}
+
+function fecharHistoricoVoltarConfig() {
+  fecharModal("modalHistorico");
+  abrirModal("modalConfiguracoes");
+}
+
+function prepararConfirmacaoSalvarData() {
+  const val = document.getElementById("inputDataInicio").value;
+  if (!val) {
+    exibirAvisoTemporario("Digite uma data e hora válidas antes de salvar.");
+    return;
+  }
+  fecharModal("modalGerenciarOcorrido");
+  abrirModalSenhaGeral("SALVAR_DATA", "Confirmar Alteração", "Salvar e Confirmar");
+}
+
+function prepararConfirmacaoReset() {
+  fecharModal("modalGerenciarOcorrido");
+  abrirModalSenhaGeral("RESET", "Confirmar Redefinição", "Redefinir Tudo");
+}
+
+function executarValidacaoSenha() {
+  const inputSenha = document.getElementById("inputSenhaAcesso").value;
+  const msgAviso = document.getElementById("msgAvisoSenhaDireita");
+
+  if (inputSenha.trim() === "") {
+    msgAviso.textContent = "Digite a senha para prosseguir";
+    msgAviso.style.color = "#e58b8b";
+    return;
+  }
+
+  if (inputSenha !== SENHA_CORRETA) {
+    vibrarAparelho();
+    msgAviso.textContent = "Senha incorreta!";
+    msgAviso.style.color = "#e58b8b";
+    return;
+  }
+
+  fecharModal("modalSenhaValidadora");
+
+  if (acaoPendenteSenha === "SALVAR_DATA") {
+    const inputVal = document.getElementById("inputDataInicio").value;
+    const novaData = parseManualDate(inputVal);
+    if (!novaData || isNaN(novaData.getTime())) {
+      exibirAvisoTemporario("Formato de data inválido! Use DD/MM/AAAA HH:MM");
+      abrirModal("modalGerenciarOcorrido");
+      return;
+    }
+    DATA_INICIO = novaData;
+    localStorage.setItem("dataInicioContador", DATA_INICIO.toISOString());
+    atualizar();
+    exibirAvisoTemporario("Data do ocorrido alterada com sucesso!");
+    abrirModal("modalGerenciarOcorrido");
+  } else if (acaoPendenteSenha === "RESET") {
+    localStorage.removeItem("historicoContador");
+    localStorage.removeItem("dataInicioContador");
+    historico = [];
+    DATA_INICIO = new Date(DATA_PADRAO);
+    atualizar();
+     exibirAvisoTemporario("Todas as configurações e históricos foram redefinidos!");
+  }
+}
+
+function abrirHistorico() {
+  fecharModal("modalConfiguracoes");
+  const lista = document.getElementById("listaHistorico");
+  lista.innerHTML = "";
+
+  if (historico.length === 0) {
+    lista.innerHTML = `<div class="vazio">Nenhum registro no histórico até o momento.</div>`;
+  } else {
+    // Ordena decrescente pelo dia
+    historico.sort((a, b) => b.dia - a.dia).forEach(item => {
+      const div = document.createElement("div");
+      div.className = "item-historico";
+
+      let statusClasse = "dia-pendente-txt";
+      let statusTexto = "Pendente (Não selecionado)";
+      let textoBotao = "Selecionar";
+
+      if (item.confirmado === true) {
+        statusClasse = "dia-confirmado-txt";
+        statusTexto = "Confirmado";
+        textoBotao = "Alterar";
+      } else if (item.confirmado === false) {
+        statusClasse = "dia-nao-confirmado-txt";
+        statusTexto = "Não Confirmado";
+        textoBotao = "Alterar";
+      }
+
+      const detalheInfo = item.confirmado === null ? "Disponível para seleção (Prazo: 3 dias)" : `Registrado em: ${item.data} às ${item.hora}`;
+
+      div.innerHTML = `
+        <div class="info-historico">
+          <div class="dia-titulo ${statusClasse}">Dia ${item.dia} - ${statusTexto}</div>
+          <div class="data-detalhe">${detalheInfo}</div>
+        </div>
+        <button class="btn-alternar" onclick="solicitarAlternarHistorico(${item.dia})">${textoBotao}</button>
+      `;
+      lista.appendChild(div);
+    });
+  }
+
+  abrirModal("modalHistorico");
+}
+
+function solicitarAlternarHistorico(dia) {
+  diaPendenteAlternar = dia;
+  fecharModal("modalHistorico");
+  
+  const reg = historico.find(i => i.dia === dia);
+  const isPendente = reg && reg.confirmado === null;
+
+  document.getElementById("tituloModalHistoricoAcao").textContent = isPendente ? "Selecionar Status do Dia" : "Alterar Status do Dia";
+  document.getElementById("msgAlterarHistorico").textContent = "Deseja confirmar ou recusar o status para o Dia " + dia + "?";
+  
+  abrirModal("modalAlterarHistorico");
+}
+
+function efetuarSimAlteracaoHistorico() {
+  fecharModal("modalAlterarHistorico");
+  const registro = historico.find(item => item.dia === diaPendenteAlternar);
+  if (registro) {
+    registro.confirmado = true;
+    const agora = new Date();
+    registro.data = formatarData(agora);
+    registro.hora = formatarHora(agora);
+    salvarHistorico();
+  }
+  abrirHistorico();
+}
+
+function efetuarNaoAlteracaoHistorico() {
+  fecharModal("modalAlterarHistorico");
+  const registro = historico.find(item => item.dia === diaPendenteAlternar);
+  if (registro) {
+    registro.confirmado = false;
+    const agora = new Date();
+    registro.data = formatarData(agora);
+    registro.hora = formatarHora(agora);
+    salvarHistorico();
+  }
+  abrirHistorico();
+}
+
+function executarTesteAutomatico() {
+  fecharModal("modalConfiguracoes");
+  DATA_INICIO = new Date(DATA_INICIO.getTime() - (1 * 86400000));
+  atualizar();
+  exibirAvisoTemporario("Teste executado! Exatamente 1 dia foi adicionado ao tempo decorrido.");
+}
+
+atualizar();
+setInterval(atualizar, 1000);
+</script>
 </body>
 </html>
+ 
